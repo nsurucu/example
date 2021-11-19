@@ -40,16 +40,21 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-    	httpSecurity
+
+        httpSecurity.headers().frameOptions().disable();
+
+        httpSecurity
             .httpBasic().disable()
             .cors().and()
             .csrf().disable()
+
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
                 .authorizeRequests()
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .antMatchers("/api/auth/signin").permitAll()
                 .antMatchers("/api/auth/signup").permitAll()
+                .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/api/todo/**/**").authenticated()
                 .antMatchers("/api/todo/**").authenticated()
                 .anyRequest().authenticated()
